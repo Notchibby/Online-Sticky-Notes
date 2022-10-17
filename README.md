@@ -8,4 +8,5 @@ This project aims to promote and reinforce our understanding of servers using ex
 https://github.com/Notchibby/Online-Sticky-Notes.git
 
 ## link to live deployment
+https://damp-badlands-71851.herokuapp.com/
 
