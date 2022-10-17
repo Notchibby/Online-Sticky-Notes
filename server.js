@@ -1,21 +1,25 @@
+// Imports required library
 const express = require('express')
 const path = require('path');
 const app = express();
 const fs = require('fs');
 
+// helper function to generate unique id
 const uuid = () => {
     return Math.floor((1 + Math.random()) * 0x10000)
       .toString(16)
       .substring(1);
   };
+
+// port that runs the app on local server and heroku
 const PORT = process.env.PORT || 3001;
 
+// sets up express for data parsing
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-
+// gets homescreen page and auxillary page
 app.get('/', (req, res) =>
   res.sendFile(path.join(__dirname, '/public/index.html'))
 );
@@ -31,6 +35,7 @@ app.get('/api/notes', (req, res) => {
     })
 });
 
+// allows posting of JSON data to server from front end
 app.post('/api/notes', (req, res) =>{
 
     const newNote = req.body
@@ -46,7 +51,7 @@ app.post('/api/notes', (req, res) =>{
     }) 
   })
 
-
+// allows for deleting of JSON data from server using front end UI
 app.delete('/api/notes/:id', (req, res) => {
     const storedNote = JSON.parse(fs.readFileSync('db/db.json'))
     const deleteNote = storedNote.find(note => note.id === req.params.id)
@@ -58,10 +63,6 @@ app.delete('/api/notes/:id', (req, res) => {
     } else{
         res.status(404)
     }
-
-    // const modifiedNote = storedNote.filter((deleteNote) => deleteNote.id !== req.params.id)
-    // fs.writeFile('db/db.json', JSON.stringify(modifiedNote))
-    // res.json(modifiedNote)
 })
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
